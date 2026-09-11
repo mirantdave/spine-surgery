@@ -1,5 +1,5 @@
-import React from 'react';
-import { Wifi, Plus, RefreshCw, Sun, Moon, Search, User, Users, Key, Sparkles } from 'lucide-react';
+import React, { useState } from 'react';
+import { Wifi, Plus, RefreshCw, Sun, Moon, Search, Users, Sparkles, MoreHorizontal } from 'lucide-react';
 import { Patient, SurgeonUser } from '../types/spine';
 
 interface NavbarProps {
@@ -32,29 +32,14 @@ export const Navbar: React.FC<NavbarProps> = ({
   onOpenStaffDirectory,
   onOpenSmartAssist,
 }) => {
-  const getTierBadge = () => {
-    switch (currentSurgeon.tier) {
-      case 'CONSULTANT_SPINE_SURGEON':
-        return <span className="badge badge-blue" style={{ fontSize: '9px' }}>Consultant</span>;
-      case 'JUNIOR_CONSULTANT':
-        return <span className="badge badge-green" style={{ fontSize: '9px' }}>Jr. Consultant</span>;
-      case 'SENIOR_REGISTRAR':
-        return <span className="badge badge-purple" style={{ fontSize: '9px' }}>Sr. Registrar</span>;
-      case 'JUNIOR_REGISTRAR':
-        return <span className="badge badge-amber" style={{ fontSize: '9px' }}>Jr. Registrar</span>;
-      default:
-        return null;
-    }
-  };
+  const [toolsMenuOpen, setToolsMenuOpen] = useState(false);
 
   return (
     <header style={{
-      background: 'rgba(255, 255, 255, 0.88)',
-      backdropFilter: 'saturate(180%) blur(20px)',
-      WebkitBackdropFilter: 'saturate(180%) blur(20px)',
+      background: '#ffffff',
       borderBottom: '1px solid var(--border-color)',
       padding: '0 20px',
-      height: '54px',
+      height: '52px',
       display: 'flex',
       alignItems: 'center',
       justifyContent: 'space-between',
@@ -65,12 +50,12 @@ export const Navbar: React.FC<NavbarProps> = ({
     }}>
       {/* Brand & WiFi Broadcast */}
       <div style={{ display: 'flex', alignItems: 'center', gap: '14px', flexShrink: 0 }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '9px' }}>
           <img
             src="/stavya-logo.jpg"
             alt="Stavya Spine Hospital"
             style={{
-              height: '28px',
+              height: '26px',
               width: 'auto',
               objectFit: 'contain',
               display: 'block',
@@ -81,20 +66,20 @@ export const Navbar: React.FC<NavbarProps> = ({
             <span style={{ fontSize: '15px', fontWeight: 700, letterSpacing: '-0.02em', color: 'var(--text-primary)' }}>
               SpineOS
             </span>
-            <span style={{ fontSize: '11px', color: 'var(--text-muted)', fontWeight: 400 }}>
-              Stavya Spine
+            <span style={{ fontSize: '11px', color: 'var(--text-muted)', fontWeight: 500 }}>
+              Stavya
             </span>
           </div>
         </div>
 
-        {/* Minimal WiFi Live Share Pill */}
+        {/* Minimal WiFi Live Sync Pill */}
         <button
           onClick={onOpenNetworkModal}
           style={{
-            background: 'rgba(0, 0, 0, 0.03)',
+            background: 'var(--bg-secondary)',
             border: '1px solid var(--border-color)',
             color: 'var(--text-secondary)',
-            padding: '4px 10px',
+            padding: '3px 9px',
             borderRadius: '999px',
             display: 'flex',
             alignItems: 'center',
@@ -104,61 +89,61 @@ export const Navbar: React.FC<NavbarProps> = ({
             cursor: 'pointer',
             transition: 'all 0.15s ease',
           }}
-          title="WiFi Live Sync • Click for QR code to open on iPad/Mobile"
+          title="WiFi Sync Active • Click for connection details"
         >
           <span style={{
             width: '6px',
             height: '6px',
             borderRadius: '50%',
             background: '#34c759',
-            boxShadow: '0 0 6px rgba(52, 199, 89, 0.7)',
             display: 'inline-block'
           }} />
-          <Wifi size={12} color="#0071e3" />
-          <span style={{ fontFamily: 'var(--font-mono)', fontSize: '10.5px' }}>{networkUrl.replace('http://', '')}</span>
+          <Wifi size={11} color="#0071e3" />
+          <span style={{ fontFamily: 'var(--font-mono)', fontSize: '10px' }}>
+            {networkUrl ? networkUrl.replace(/^https?:\/\//, '') : 'Sync'}
+          </span>
         </button>
       </div>
 
-      {/* Global Spotlight Search Bar (Apple macOS Style) */}
+      {/* Global Spotlight Search Bar (Apple Style) */}
       <div style={{
         flex: 1,
-        maxWidth: '360px',
+        maxWidth: '380px',
         position: 'relative',
         display: 'flex',
         alignItems: 'center'
       }}>
-        <Search size={13} style={{ position: 'absolute', left: '11px', color: 'var(--text-muted)' }} />
+        <Search size={13} style={{ position: 'absolute', left: '12px', color: 'var(--text-muted)' }} />
         <input
           type="text"
-          placeholder="Search patient, MRN, diagnosis, levels..."
+          placeholder="Search patient, MRN, diagnosis, level (e.g. L4-L5)..."
           value={searchTerm}
           onChange={(e) => onSearchChange(e.target.value)}
           style={{
             width: '100%',
             paddingLeft: '32px',
-            paddingRight: '40px',
-            background: '#f2f3f5',
+            paddingRight: '36px',
+            background: '#f4f5f7',
             border: '1px solid transparent',
             color: 'var(--text-primary)',
             fontSize: '12px',
-            height: '30px',
+            height: '32px',
             borderRadius: '999px',
-            boxShadow: 'none',
             outline: 'none',
-            transition: 'background 0.15s ease, border-color 0.15s ease'
+            transition: 'all 0.15s ease'
           }}
           onFocus={(e) => {
             e.currentTarget.style.background = '#ffffff';
-            e.currentTarget.style.borderColor = 'rgba(0, 113, 227, 0.4)';
+            e.currentTarget.style.borderColor = '#0071e3';
           }}
           onBlur={(e) => {
-            e.currentTarget.style.background = '#f2f3f5';
+            e.currentTarget.style.background = '#f4f5f7';
             e.currentTarget.style.borderColor = 'transparent';
           }}
         />
         <span style={{
           position: 'absolute',
-          right: '8px',
+          right: '9px',
           fontSize: '10px',
           color: 'var(--text-muted)',
           fontFamily: 'var(--font-mono)',
@@ -171,122 +156,177 @@ export const Navbar: React.FC<NavbarProps> = ({
         </span>
       </div>
 
-      {/* Action Buttons & Doctor Profile */}
-      <div style={{ display: 'flex', alignItems: 'center', gap: '8px', flexShrink: 0 }}>
+      {/* Right Controls: AI Assistant, New Patient, Tools Overflow, Surgeon Profile */}
+      <div style={{ display: 'flex', alignItems: 'center', gap: '8px', flexShrink: 0, position: 'relative' }}>
         {onOpenSmartAssist && (
           <button
             onClick={onOpenSmartAssist}
             style={{
-              height: '30px',
+              height: '32px',
               padding: '0 12px',
               fontSize: '12px',
-              fontWeight: 600,
+              fontWeight: 500,
               borderRadius: '999px',
-              background: 'linear-gradient(135deg, #0071e3 0%, #00c7be 100%)',
-              color: '#ffffff',
-              border: 'none',
+              background: 'rgba(0, 113, 227, 0.08)',
+              color: '#0071e3',
+              border: '1px solid rgba(0, 113, 227, 0.2)',
               display: 'flex',
               alignItems: 'center',
               gap: '6px',
               cursor: 'pointer',
-              boxShadow: '0 2px 8px rgba(0, 113, 227, 0.25)',
-              transition: 'transform 0.15s ease'
+              transition: 'all 0.15s ease'
             }}
-            title="Open SpineOS AI Sentinel & Clinical Decision Support"
+            title="SpineOS Clinical Decision Support & AI Risk Review"
           >
             <Sparkles size={13} />
-            <span>AI Sentinel</span>
+            <span>AI Risk Check</span>
           </button>
         )}
 
         <button
           onClick={onAddNewPatient}
           className="btn btn-primary"
-          style={{ height: '30px', padding: '0 12px', fontSize: '12px', borderRadius: '999px', gap: '5px' }}
+          style={{ height: '32px', padding: '0 14px', fontSize: '12px', borderRadius: '999px', gap: '5px' }}
         >
           <Plus size={13} />
           <span>New Patient</span>
         </button>
 
-        {/* Stavya 213 Staff Org Directory */}
-        <button
-          onClick={onOpenStaffDirectory}
-          style={{ 
-            height: '30px', 
-            padding: '0 10px', 
-            fontSize: '11px', 
-            borderRadius: '999px', 
-            color: 'var(--text-secondary)', 
-            border: '1px solid var(--border-color)',
-            background: 'var(--bg-secondary)',
-            display: 'flex', 
-            alignItems: 'center', 
-            gap: '5px',
-            cursor: 'pointer',
-            fontWeight: 500,
-            transition: 'all 0.15s ease'
-          }}
-          title="Browse & search all 213 staff from Stavya Hospital Org Chart"
-        >
-          <Users size={12} color="#0071e3" />
-          <span>Staff (213)</span>
-        </button>
+        {/* Minimal Tools Overflow Button */}
+        <div style={{ position: 'relative' }}>
+          <button
+            onClick={() => setToolsMenuOpen(prev => !prev)}
+            style={{
+              height: '32px',
+              width: '32px',
+              borderRadius: '999px',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              background: toolsMenuOpen ? 'var(--bg-tertiary)' : 'var(--bg-secondary)',
+              border: '1px solid var(--border-color)',
+              color: 'var(--text-secondary)',
+              cursor: 'pointer',
+              transition: 'all 0.15s ease'
+            }}
+            title="Hospital tools & preferences"
+          >
+            <MoreHorizontal size={14} />
+          </button>
 
-        <button
-          onClick={onResetDemo}
-          style={{
-            height: '30px',
-            width: '30px',
-            borderRadius: '999px',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            background: 'var(--bg-secondary)',
-            border: '1px solid var(--border-color)',
-            color: 'var(--text-muted)',
-            cursor: 'pointer'
-          }}
-          title="Reset to realistic demo spine cases"
-        >
-          <RefreshCw size={12} />
-        </button>
+          {toolsMenuOpen && (
+            <div 
+              style={{
+                position: 'absolute',
+                top: '40px',
+                right: 0,
+                width: '210px',
+                background: '#ffffff',
+                border: '1px solid var(--border-color)',
+                borderRadius: '12px',
+                boxShadow: '0 10px 30px rgba(0, 0, 0, 0.12)',
+                padding: '6px',
+                display: 'flex',
+                flexDirection: 'column',
+                gap: '2px',
+                zIndex: 200
+              }}
+              onMouseLeave={() => setToolsMenuOpen(false)}
+            >
+              <button
+                onClick={() => {
+                  onOpenStaffDirectory();
+                  setToolsMenuOpen(false);
+                }}
+                style={{
+                  border: 'none',
+                  background: 'transparent',
+                  padding: '8px 10px',
+                  borderRadius: '8px',
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '8px',
+                  fontSize: '12px',
+                  color: 'var(--text-primary)',
+                  cursor: 'pointer',
+                  textAlign: 'left'
+                }}
+                onMouseEnter={(e) => e.currentTarget.style.background = 'var(--bg-secondary)'}
+                onMouseLeave={(e) => e.currentTarget.style.background = 'transparent'}
+              >
+                <Users size={14} color="#0071e3" />
+                <span>Staff Directory (213)</span>
+              </button>
 
-        <button
-          onClick={onToggleTheme}
-          style={{
-            height: '30px',
-            width: '30px',
-            borderRadius: '999px',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            background: 'var(--bg-secondary)',
-            border: '1px solid var(--border-color)',
-            color: 'var(--text-muted)',
-            cursor: 'pointer'
-          }}
-          title="Toggle Light/Dark Theme"
-        >
-          {theme === 'dark' ? <Sun size={13} /> : <Moon size={13} />}
-        </button>
+              <button
+                onClick={() => {
+                  onToggleTheme();
+                  setToolsMenuOpen(false);
+                }}
+                style={{
+                  border: 'none',
+                  background: 'transparent',
+                  padding: '8px 10px',
+                  borderRadius: '8px',
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '8px',
+                  fontSize: '12px',
+                  color: 'var(--text-primary)',
+                  cursor: 'pointer',
+                  textAlign: 'left'
+                }}
+                onMouseEnter={(e) => e.currentTarget.style.background = 'var(--bg-secondary)'}
+                onMouseLeave={(e) => e.currentTarget.style.background = 'transparent'}
+              >
+                {theme === 'dark' ? <Sun size={14} color="#f59e0b" /> : <Moon size={14} color="#6366f1" />}
+                <span>{theme === 'dark' ? 'Light Theme' : 'Dark Theme'}</span>
+              </button>
 
-        {/* Doctor Profile Pill */}
+              <button
+                onClick={() => {
+                  onResetDemo();
+                  setToolsMenuOpen(false);
+                }}
+                style={{
+                  border: 'none',
+                  background: 'transparent',
+                  padding: '8px 10px',
+                  borderRadius: '8px',
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '8px',
+                  fontSize: '12px',
+                  color: 'var(--text-secondary)',
+                  cursor: 'pointer',
+                  textAlign: 'left'
+                }}
+                onMouseEnter={(e) => e.currentTarget.style.background = 'var(--bg-secondary)'}
+                onMouseLeave={(e) => e.currentTarget.style.background = 'transparent'}
+              >
+                <RefreshCw size={14} />
+                <span>Reset Demo Records</span>
+              </button>
+            </div>
+          )}
+        </div>
+
+        {/* Surgeon Profile Pill */}
         <button
           onClick={onOpenHierarchyModal}
           style={{
             display: 'flex',
             alignItems: 'center',
             gap: '8px',
-            background: '#ffffff',
+            background: 'var(--bg-secondary)',
             padding: '3px 10px 3px 4px',
             borderRadius: '999px',
             border: '1px solid var(--border-color)',
-            boxShadow: 'var(--shadow-sm)',
             cursor: 'pointer',
             textAlign: 'left',
             transition: 'all 0.15s ease'
           }}
-          title="Switch logged-in surgeon or view credentials"
+          title="Switch logged-in surgeon or review permissions"
         >
           <div style={{
             width: '24px',
@@ -302,12 +342,9 @@ export const Navbar: React.FC<NavbarProps> = ({
           }}>
             {currentSurgeon.initials}
           </div>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-            <span style={{ fontSize: '11.5px', fontWeight: 600, color: 'var(--text-primary)', whiteSpace: 'nowrap' }}>
-              {currentSurgeon.name}
-            </span>
-            {getTierBadge()}
-          </div>
+          <span style={{ fontSize: '11.5px', fontWeight: 600, color: 'var(--text-primary)', whiteSpace: 'nowrap' }}>
+            {currentSurgeon.name.replace('Dr. ', '')}
+          </span>
         </button>
       </div>
     </header>

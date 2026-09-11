@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Patient, PatientStatus } from '../types/spine';
-import { Users, Bed, Calendar, Filter, Sparkles } from 'lucide-react';
+import { Bed, Calendar } from 'lucide-react';
 
 interface PatientSidebarProps {
   patients: Patient[];
@@ -15,7 +15,6 @@ export const PatientSidebar: React.FC<PatientSidebarProps> = ({
   selectedPatientId,
   onSelectPatient,
   filterText,
-  onOpenPatient3D,
 }) => {
   const [statusFilter, setStatusFilter] = useState<string>('ALL');
 
@@ -38,45 +37,43 @@ export const PatientSidebar: React.FC<PatientSidebarProps> = ({
 
   const getStatusBadge = (status: PatientStatus) => {
     if (status.includes('POD 0') || status.includes('POD 1')) {
-      return <span className="badge badge-amber">{status}</span>;
+      return <span className="badge badge-amber" style={{ fontSize: '10px', padding: '1px 6px' }}>{status}</span>;
     }
     if (status.includes('POD 2') || status.includes('POD 3')) {
-      return <span className="badge badge-green">{status}</span>;
+      return <span className="badge badge-green" style={{ fontSize: '10px', padding: '1px 6px' }}>{status}</span>;
     }
     if (status === 'Scheduled for Surgery') {
-      return <span className="badge badge-purple">Scheduled</span>;
+      return <span className="badge badge-purple" style={{ fontSize: '10px', padding: '1px 6px' }}>Scheduled</span>;
     }
     if (status === 'Discharged') {
-      return <span className="badge badge-blue">Discharged</span>;
+      return <span className="badge badge-blue" style={{ fontSize: '10px', padding: '1px 6px' }}>Discharged</span>;
     }
-    return <span className="badge badge-blue">{status}</span>;
+    return <span className="badge badge-blue" style={{ fontSize: '10px', padding: '1px 6px' }}>{status}</span>;
   };
 
   return (
     <aside style={{
-      width: '310px',
+      width: '300px',
       borderRight: '1px solid var(--border-color)',
       background: '#ffffff',
       display: 'flex',
       flexDirection: 'column',
-      height: 'calc(100vh - 54px)',
+      height: 'calc(100vh - 52px)',
       overflow: 'hidden'
     }}>
-      {/* Header & Filter Tabs */}
+      {/* Header & Clean 3-way Filter */}
       <div style={{ padding: '12px 14px', borderBottom: '1px solid var(--border-color)', background: '#ffffff' }}>
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '8px' }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-            <span style={{ fontSize: '13px', fontWeight: 600, color: 'var(--text-primary)', letterSpacing: '-0.01em' }}>
-              Patients
-            </span>
-          </div>
+          <span style={{ fontSize: '13px', fontWeight: 700, color: 'var(--text-primary)', letterSpacing: '-0.01em' }}>
+            Patients
+          </span>
           <span style={{
             background: 'var(--bg-secondary)',
             color: 'var(--text-secondary)',
             borderRadius: '999px',
             padding: '1px 7px',
             fontSize: '11px',
-            fontWeight: 500
+            fontWeight: 600
           }}>
             {filteredPatients.length}
           </span>
@@ -92,9 +89,9 @@ export const PatientSidebar: React.FC<PatientSidebarProps> = ({
         }}>
           {[
             { key: 'ALL', label: 'All' },
-            { key: 'POSTOP', label: 'Inpatient' },
+            { key: 'POSTOP', label: 'Inpatients' },
             { key: 'SCHEDULED', label: 'Planned' },
-            { key: 'DISCHARGED', label: 'Discharged' }
+            { key: 'DISCHARGED', label: 'Done' }
           ].map((tab) => (
             <button
               key={tab.key}
@@ -107,7 +104,7 @@ export const PatientSidebar: React.FC<PatientSidebarProps> = ({
                 border: 'none',
                 padding: '4px 2px',
                 borderRadius: '6px',
-                fontSize: '10.5px',
+                fontSize: '11px',
                 fontWeight: statusFilter === tab.key ? 600 : 500,
                 cursor: 'pointer',
                 transition: 'all 0.15s ease'
@@ -136,7 +133,7 @@ export const PatientSidebar: React.FC<PatientSidebarProps> = ({
             No matching patient records
           </div>
         ) : (
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '5px' }}>
             {filteredPatients.map((patient) => {
               const isSelected = patient.id === selectedPatientId;
 
@@ -145,59 +142,40 @@ export const PatientSidebar: React.FC<PatientSidebarProps> = ({
                   key={patient.id}
                   onClick={() => onSelectPatient(patient.id)}
                   style={{
-                    padding: '10px 12px',
-                    borderRadius: '10px',
+                    padding: '9px 11px',
+                    borderRadius: '9px',
                     background: isSelected ? 'rgba(0, 113, 227, 0.06)' : '#ffffff',
-                    border: isSelected ? '1px solid rgba(0, 113, 227, 0.35)' : '1px solid var(--border-color)',
+                    border: isSelected ? '1px solid rgba(0, 113, 227, 0.3)' : '1px solid transparent',
                     cursor: 'pointer',
-                    transition: 'all 0.15s ease',
-                    boxShadow: isSelected ? '0 1px 4px rgba(0, 113, 227, 0.08)' : 'none',
-                    position: 'relative'
+                    transition: 'all 0.15s ease'
+                  }}
+                  onMouseEnter={(e) => {
+                    if (!isSelected) e.currentTarget.style.background = 'var(--bg-secondary)';
+                  }}
+                  onMouseLeave={(e) => {
+                    if (!isSelected) e.currentTarget.style.background = '#ffffff';
                   }}
                 >
-                  {/* Top line: Name and Status */}
-                  <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '4px' }}>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                      <div style={{
-                        width: '24px',
-                        height: '24px',
-                        borderRadius: '6px',
-                        background: patient.avatarColor || '#0071e3',
-                        color: 'white',
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                        fontSize: '10px',
-                        fontWeight: 700
-                      }}>
-                        {patient.name.charAt(0)}
-                      </div>
-                      <div>
-                        <div style={{ fontSize: '12.5px', fontWeight: 600, color: 'var(--text-primary)', letterSpacing: '-0.01em' }}>
-                          {patient.name}
-                        </div>
-                        <div style={{ fontSize: '10px', color: 'var(--text-muted)', fontFamily: 'var(--font-mono)' }}>
-                          {patient.mrn} • {patient.age}y/{patient.gender.charAt(0)}
-                        </div>
-                      </div>
-                    </div>
+                  {/* Top Line: Name and Status */}
+                  <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '3px' }}>
+                    <span style={{ fontSize: '13px', fontWeight: 600, color: 'var(--text-primary)', letterSpacing: '-0.01em' }}>
+                      {patient.name}
+                    </span>
                     {getStatusBadge(patient.status)}
                   </div>
 
-                  {/* Spinal levels and procedure */}
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '6px', margin: '4px 0' }}>
+                  {/* Spinal Level & Procedure */}
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '6px', marginBottom: '4px' }}>
                     <span style={{
-                      fontSize: '9.5px',
-                      fontWeight: 600,
+                      fontSize: '10px',
+                      fontWeight: 700,
                       fontFamily: 'var(--font-mono)',
                       padding: '1px 5px',
                       borderRadius: '4px',
-                      background: patient.spineRegion === 'cervical' ? 'rgba(0, 113, 227, 0.08)' :
-                                  patient.spineRegion === 'thoracic' ? 'rgba(175, 82, 222, 0.1)' : 'rgba(52, 199, 89, 0.1)',
-                      color: patient.spineRegion === 'cervical' ? '#0071e3' :
-                             patient.spineRegion === 'thoracic' ? '#af52de' : '#248a3d'
+                      background: 'rgba(0, 113, 227, 0.08)',
+                      color: '#0071e3'
                     }}>
-                      {patient.affectedLevels.join('-') || patient.spineRegion}
+                      {patient.affectedLevels.join('-') || patient.spineRegion.toUpperCase()}
                     </span>
                     <span style={{
                       fontSize: '11px',
@@ -211,46 +189,24 @@ export const PatientSidebar: React.FC<PatientSidebarProps> = ({
                     </span>
                   </div>
 
-                  {/* Bed & Date footer */}
+                  {/* Bed & Details */}
                   <div style={{
                     display: 'flex',
                     alignItems: 'center',
                     justifyContent: 'space-between',
-                    fontSize: '10px',
-                    color: 'var(--text-muted)',
-                    paddingTop: '4px'
+                    fontSize: '10.5px',
+                    color: 'var(--text-muted)'
                   }}>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
-                      <Bed size={11} />
-                      <span>{patient.roomBed}</span>
-                    </div>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
-                      <Calendar size={11} />
-                      <span>{patient.plannedOrSurgeryDate}</span>
-                    </div>
+                    <span style={{ display: 'flex', alignItems: 'center', gap: '3px' }}>
+                      <Bed size={11} color="#0071e3" /> {patient.roomBed.replace('Spine Ward - ', '')}
+                    </span>
+                    <span>{patient.age}y/{patient.gender.charAt(0)} • {patient.mrn}</span>
                   </div>
                 </div>
               );
             })}
           </div>
         )}
-      </div>
-
-      {/* Helper footer */}
-      <div style={{
-        padding: '8px 14px',
-        borderTop: '1px solid var(--border-color)',
-        fontSize: '10.5px',
-        color: 'var(--text-muted)',
-        background: '#ffffff',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'space-between'
-      }}>
-        <span>WiFi Sync Active</span>
-        <span style={{ color: '#34c759', display: 'flex', alignItems: 'center', gap: '4px', fontWeight: 500 }}>
-          <Sparkles size={11} /> Stavya Live
-        </span>
       </div>
     </aside>
   );
