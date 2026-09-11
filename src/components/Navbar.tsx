@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Wifi, Plus, RefreshCw, Sun, Moon, Search, Users, Sparkles, MoreHorizontal } from 'lucide-react';
+import { Wifi, Plus, RefreshCw, Sun, Moon, Search, Users, Sparkles, MoreHorizontal, Key } from 'lucide-react';
 import { Patient, SurgeonUser } from '../types/spine';
 
 interface NavbarProps {
@@ -33,6 +33,21 @@ export const Navbar: React.FC<NavbarProps> = ({
   onOpenSmartAssist,
 }) => {
   const [toolsMenuOpen, setToolsMenuOpen] = useState(false);
+
+  const getTierBadge = () => {
+    switch (currentSurgeon.tier) {
+      case 'CONSULTANT_SPINE_SURGEON':
+        return <span className="badge badge-blue" style={{ fontSize: '9.5px', padding: '1px 6px' }}>Consultant</span>;
+      case 'JUNIOR_CONSULTANT':
+        return <span className="badge badge-green" style={{ fontSize: '9.5px', padding: '1px 6px' }}>Jr. Consultant</span>;
+      case 'SENIOR_REGISTRAR':
+        return <span className="badge badge-purple" style={{ fontSize: '9.5px', padding: '1px 6px' }}>Sr. Registrar</span>;
+      case 'JUNIOR_REGISTRAR':
+        return <span className="badge badge-amber" style={{ fontSize: '9.5px', padding: '1px 6px' }}>Jr. Registrar</span>;
+      default:
+        return null;
+    }
+  };
 
   return (
     <header style={{
@@ -345,6 +360,8 @@ export const Navbar: React.FC<NavbarProps> = ({
           <span style={{ fontSize: '11.5px', fontWeight: 600, color: 'var(--text-primary)', whiteSpace: 'nowrap' }}>
             {currentSurgeon.name.replace('Dr. ', '')}
           </span>
+          {getTierBadge()}
+          <Key size={11} color="var(--text-muted)" style={{ marginLeft: '1px' }} />
         </button>
       </div>
     </header>

@@ -47,21 +47,24 @@ router.get('/:id/privileges', (req: Request, res: Response) => {
   });
 });
 
-// POST /api/auth/login - authenticate surgeon by PIN or credentials
-router.post('/auth/login', (req: Request, res: Response) => {
-  const { identifier, passwordOrPin } = req.body;
+// Authenticate surgeon by PIN or password
+const authenticateSurgeon = (req: Request, res: Response) => {
+  const { identifier, passwordOrPin, password, pin } = req.body;
   const db = getDatabase();
   const surgeons = db.surgeons || STAVYA_SURGEONS;
 
-  const surgeon = surgeons.find(
-    s => (s.username.toLowerCase() === identifier?.toLowerCase() || 
-          s.email.toLowerCase() === identifier?.toLowerCase() || 
-          s.id === identifier) &&
-         (s.password === passwordOrPin || s.pin === passwordOrPin || !passwordOrPin)
-  );
+  const credential = (passwordOrPin || password || pin || '').trim();
+
+  const surgeon = surgeons.find(s => {
+    const matchId = s.username.toLowerCase() === identifier?.trim().toLowerCase() || 
+                    s.email.toLowerCase() === identifier?.trim().toLowerCase() || 
+                    s.id === identifier?.trim();
+    if (!matchId) return false;
+    return s.password === credential || s.pin === credential;
+  });
 
   if (!surgeon) {
-    return res.status(401).json({ error: 'Invalid surgeon credentials or PIN' });
+    return res.status(401).json({ error: 'Invalid username/email or password/PIN' });
   }
 
   logAuditEvent({
@@ -76,7 +79,10 @@ router.post('/auth/login', (req: Request, res: Response) => {
     success: true,
     user: surgeon
   });
-});
+};
+
+router.post('/login', authenticateSurgeon);
+router.post('/auth/login', authenticateSurgeon);
 
 // GET /api/staff-directory - full hospital staff directory
 router.get('/directory/all', (_req: Request, res: Response) => {

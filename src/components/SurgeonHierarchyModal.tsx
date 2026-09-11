@@ -31,8 +31,9 @@ export const SurgeonHierarchyModal: React.FC<SurgeonHierarchyModalProps> = ({
   currentSurgeon,
   onSelectSurgeon,
 }) => {
-  const [activeTab, setActiveTab] = useState<'HIERARCHY' | 'LOGIN_FORM'>('HIERARCHY');
+  const [activeTab, setActiveTab] = useState<'HIERARCHY' | 'LOGIN_FORM' | 'CREDENTIALS_TABLE'>('HIERARCHY');
   const [copiedId, setCopiedId] = useState<string | null>(null);
+  const [filterQuery, setFilterQuery] = useState('');
   
   // Custom login state
   const [identifier, setIdentifier] = useState('');
@@ -42,15 +43,37 @@ export const SurgeonHierarchyModal: React.FC<SurgeonHierarchyModalProps> = ({
   if (!isOpen) return null;
 
   const handleCopyCredentials = (s: SurgeonUser) => {
-    const text = `Doctor: ${s.name}\nUsername: ${s.username}\nPIN: ${s.pin}\nPassword: ${s.password}\nRole: ${s.tierLabel}`;
+    const text = `Doctor: ${s.name}\nTier: ${s.tierLabel}\nEmail: ${s.email}\nUsername: ${s.username}\nQuick PIN: ${s.pin}\nPassword: ${s.password}`;
     navigator.clipboard.writeText(text);
     setCopiedId(s.id);
     setTimeout(() => setCopiedId(null), 2000);
   };
 
-  const handleManualLogin = (e: React.FormEvent) => {
+  const handleManualLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoginError('');
+
+    try {
+      const res = await fetch('/api/auth/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ identifier: identifier.trim(), passwordOrPin: passwordOrPin.trim() })
+      });
+      if (res.ok) {
+        const data = await res.json();
+        if (data && data.user) {
+          onSelectSurgeon(data.user);
+          onClose();
+          return;
+        }
+      } else {
+        const errData = await res.json().catch(() => ({}));
+        setLoginError(errData.error || 'Invalid credentials or PIN.');
+        return;
+      }
+    } catch {
+      // Offline fallback
+    }
 
     const found = surgeons.find(
       s => (s.username.toLowerCase() === identifier.trim().toLowerCase() || 
@@ -62,7 +85,7 @@ export const SurgeonHierarchyModal: React.FC<SurgeonHierarchyModalProps> = ({
       onSelectSurgeon(found);
       onClose();
     } else {
-      setLoginError('Invalid username/email or password/PIN. Please check the directory.');
+      setLoginError('Invalid username/email or password/PIN. Please check the credentials table.');
     }
   };
 
@@ -192,6 +215,23 @@ export const SurgeonHierarchyModal: React.FC<SurgeonHierarchyModalProps> = ({
               }}
             >
               Manual PIN / Password Login
+            </button>
+            <button
+              onClick={() => setActiveTab('CREDENTIALS_TABLE')}
+              style={{
+                background: activeTab === 'CREDENTIALS_TABLE' ? '#ffffff' : 'transparent',
+                boxShadow: activeTab === 'CREDENTIALS_TABLE' ? '0 1px 3px rgba(0, 0, 0, 0.08)' : 'none',
+                border: 'none',
+                color: activeTab === 'CREDENTIALS_TABLE' ? '#1d1d1f' : '#6e6e73',
+                padding: '6px 12px',
+                borderRadius: '6px',
+                fontSize: '11px',
+                fontWeight: activeTab === 'CREDENTIALS_TABLE' ? 600 : 500,
+                cursor: 'pointer',
+                transition: 'all 0.15s ease'
+              }}
+            >
+              All 10 Doctor Credentials
             </button>
           </div>
         </div>
@@ -697,6 +737,251 @@ export const SurgeonHierarchyModal: React.FC<SurgeonHierarchyModalProps> = ({
               <span>Authenticate & Enter SpineOS</span>
             </button>
           </form>
+        )}
+
+        {/* Tab 3: All 10 Credentials Reference Table */}
+        {activeTab === 'CREDENTIALS_TABLE' && (
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+            <div style={{
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'space-between',
+              flexWrap: 'wrap',
+              gap: '12px',
+              background: '#f5f5f7',
+              padding: '12px 16px',
+              borderRadius: '10px',
+              border: '1px solid rgba(0, 0, 0, 0.06)'
+            }}>
+              <div>
+                <h3 style={{ fontSize: '14px', fontWeight: 700, color: '#1d1d1f', marginBottom: '2px' }}>
+                  Stavya Spine Institute — Staff Credentials Directory
+                </h3>
+                <p style={{ fontSize: '12px', color: '#6e6e73' }}>
+                  Complete login credentials for all 10 spine doctors. Each doctor can log in using their username, email, or 4-digit PIN.
+                </p>
+              </div>
+
+              <input
+                type="text"
+                placeholder="Search by doctor, username, or PIN..."
+                value={filterQuery}
+                onChange={e => setFilterQuery(e.target.value)}
+                style={{
+                  padding: '7px 12px',
+                  fontSize: '12px',
+                  borderRadius: '8px',
+                  border: '1px solid rgba(0, 0, 0, 0.15)',
+                  background: '#ffffff',
+                  minWidth: '240px',
+                  outline: 'none'
+                }}
+              />
+            </div>
+
+            <div style={{
+              overflowX: 'auto',
+              borderRadius: '10px',
+              border: '1px solid rgba(0, 0, 0, 0.08)',
+              background: '#ffffff'
+            }}>
+              <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '12px', textAlign: 'left' }}>
+                <thead>
+                  <tr style={{ background: '#f5f5f7', borderBottom: '1px solid rgba(0, 0, 0, 0.08)', color: '#6e6e73', fontWeight: 600 }}>
+                    <th style={{ padding: '10px 14px' }}>Surgeon / Doctor</th>
+                    <th style={{ padding: '10px 14px' }}>Hierarchy Tier</th>
+                    <th style={{ padding: '10px 14px' }}>Username / Email</th>
+                    <th style={{ padding: '10px 14px' }}>Quick PIN</th>
+                    <th style={{ padding: '10px 14px' }}>Password</th>
+                    <th style={{ padding: '10px 14px' }}>Privileges</th>
+                    <th style={{ padding: '10px 14px', textAlign: 'right' }}>Actions</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {surgeons
+                    .filter(s => {
+                      if (!filterQuery) return true;
+                      const q = filterQuery.toLowerCase();
+                      return (
+                        s.name.toLowerCase().includes(q) ||
+                        s.username.toLowerCase().includes(q) ||
+                        s.email.toLowerCase().includes(q) ||
+                        s.pin.includes(q) ||
+                        s.tierLabel.toLowerCase().includes(q)
+                      );
+                    })
+                    .map((s, idx) => {
+                      const isCurrent = s.id === currentSurgeon.id;
+                      const avatarColors: Record<SurgeonTier, { bg: string; color: string }> = {
+                        CONSULTANT_SPINE_SURGEON: { bg: 'rgba(0, 113, 227, 0.1)', color: '#0071e3' },
+                        JUNIOR_CONSULTANT: { bg: 'rgba(52, 199, 89, 0.1)', color: '#28a745' },
+                        SENIOR_REGISTRAR: { bg: 'rgba(175, 82, 222, 0.1)', color: '#af52de' },
+                        JUNIOR_REGISTRAR: { bg: 'rgba(255, 149, 0, 0.1)', color: '#d97706' },
+                        DIRECTOR_QUALITY: { bg: 'rgba(0, 113, 227, 0.1)', color: '#0071e3' }
+                      };
+                      const avatarStyle = avatarColors[s.tier] || { bg: '#f5f5f7', color: '#1d1d1f' };
+
+                      return (
+                        <tr
+                          key={s.id}
+                          style={{
+                            borderBottom: idx === surgeons.length - 1 ? 'none' : '1px solid rgba(0, 0, 0, 0.05)',
+                            background: isCurrent ? 'rgba(0, 113, 227, 0.04)' : 'transparent',
+                            transition: 'background 0.15s ease'
+                          }}
+                        >
+                          {/* Doctor name */}
+                          <td style={{ padding: '12px 14px', verticalAlign: 'middle' }}>
+                            <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                              <span style={{
+                                width: '28px',
+                                height: '28px',
+                                borderRadius: '50%',
+                                background: avatarStyle.bg,
+                                color: avatarStyle.color,
+                                display: 'flex',
+                                alignItems: 'center',
+                                justifyContent: 'center',
+                                fontWeight: 700,
+                                fontSize: '11px'
+                              }}>
+                                {s.name.replace('Dr. ', '').charAt(0)}
+                              </span>
+                              <div>
+                                <div style={{ fontWeight: 600, color: '#1d1d1f' }}>
+                                  {s.name}
+                                  {isCurrent && (
+                                    <span style={{
+                                      marginLeft: '6px',
+                                      fontSize: '10px',
+                                      color: '#0071e3',
+                                      fontWeight: 700,
+                                      background: 'rgba(0, 113, 227, 0.1)',
+                                      padding: '2px 6px',
+                                      borderRadius: '4px'
+                                    }}>
+                                      Active
+                                    </span>
+                                  )}
+                                </div>
+                                <div style={{ fontSize: '11px', color: '#86868b' }}>
+                                  {s.designation}
+                                </div>
+                              </div>
+                            </div>
+                          </td>
+
+                          {/* Tier */}
+                          <td style={{ padding: '12px 14px', verticalAlign: 'middle' }}>
+                            {getTierBadge(s.tier)}
+                          </td>
+
+                          {/* Username & Email */}
+                          <td style={{ padding: '12px 14px', verticalAlign: 'middle' }}>
+                            <div style={{ fontFamily: 'ui-monospace, monospace', fontWeight: 600, color: '#1d1d1f', fontSize: '12px' }}>
+                              {s.username}
+                            </div>
+                            <div style={{ fontSize: '11px', color: '#86868b' }}>
+                              {s.email}
+                            </div>
+                          </td>
+
+                          {/* PIN */}
+                          <td style={{ padding: '12px 14px', verticalAlign: 'middle' }}>
+                            <span style={{
+                              fontFamily: 'ui-monospace, monospace',
+                              fontSize: '13px',
+                              fontWeight: 700,
+                              background: '#f5f5f7',
+                              padding: '3px 8px',
+                              borderRadius: '6px',
+                              border: '1px solid rgba(0, 0, 0, 0.1)',
+                              color: '#1d1d1f',
+                              letterSpacing: '0.05em'
+                            }}>
+                              {s.pin}
+                            </span>
+                          </td>
+
+                          {/* Password */}
+                          <td style={{ padding: '12px 14px', verticalAlign: 'middle' }}>
+                            <span style={{
+                              fontFamily: 'ui-monospace, monospace',
+                              fontSize: '11px',
+                              background: '#f5f5f7',
+                              padding: '3px 8px',
+                              borderRadius: '6px',
+                              color: '#424245'
+                            }}>
+                              {s.password}
+                            </span>
+                          </td>
+
+                          {/* Privileges */}
+                          <td style={{ padding: '12px 14px', verticalAlign: 'middle' }}>
+                            <div style={{ fontSize: '11px', color: '#515154', maxWidth: '220px' }}>
+                              {s.tier === 'CONSULTANT_SPINE_SURGEON' && 'Full Surgical, OT & Discharge sign-off authority'}
+                              {s.tier === 'JUNIOR_CONSULTANT' && 'Surgical procedures, IPD & Discharge drafts'}
+                              {s.tier === 'SENIOR_REGISTRAR' && 'Inpatient care, Round entries & WHO safety'}
+                              {s.tier === 'JUNIOR_REGISTRAR' && 'Ward monitoring, pre-op checks & vitals'}
+                            </div>
+                          </td>
+
+                          {/* Actions */}
+                          <td style={{ padding: '12px 14px', verticalAlign: 'middle', textAlign: 'right' }}>
+                            <div style={{ display: 'inline-flex', alignItems: 'center', gap: '6px' }}>
+                              <button
+                                onClick={() => handleCopyCredentials(s)}
+                                title="Copy all login credentials"
+                                style={{
+                                  background: copiedId === s.id ? 'rgba(52, 199, 89, 0.15)' : '#f5f5f7',
+                                  color: copiedId === s.id ? '#34c759' : '#1d1d1f',
+                                  border: '1px solid rgba(0, 0, 0, 0.08)',
+                                  padding: '5px 9px',
+                                  borderRadius: '6px',
+                                  fontSize: '11px',
+                                  fontWeight: 500,
+                                  cursor: 'pointer',
+                                  display: 'inline-flex',
+                                  alignItems: 'center',
+                                  gap: '4px'
+                                }}
+                              >
+                                {copiedId === s.id ? <Check size={12} /> : <Copy size={12} />}
+                                <span>{copiedId === s.id ? 'Copied' : 'Copy'}</span>
+                              </button>
+
+                              <button
+                                onClick={() => {
+                                  onSelectSurgeon(s);
+                                  onClose();
+                                }}
+                                style={{
+                                  background: isCurrent ? 'rgba(0, 113, 227, 0.1)' : '#0071e3',
+                                  color: isCurrent ? '#0071e3' : '#ffffff',
+                                  border: 'none',
+                                  padding: '5px 10px',
+                                  borderRadius: '6px',
+                                  fontSize: '11px',
+                                  fontWeight: 600,
+                                  cursor: 'pointer',
+                                  display: 'inline-flex',
+                                  alignItems: 'center',
+                                  gap: '4px'
+                                }}
+                              >
+                                <LogIn size={12} />
+                                <span>{isCurrent ? 'Logged In' : 'Sign In'}</span>
+                              </button>
+                            </div>
+                          </td>
+                        </tr>
+                      );
+                    })}
+                </tbody>
+              </table>
+            </div>
+          </div>
         )}
       </div>
     </div>

@@ -45,7 +45,28 @@ import {
 
 export function App() {
   const [surgeons, setSurgeons] = useState<SurgeonUser[]>(STAVYA_SURGEONS);
-  const [currentSurgeon, setCurrentSurgeon] = useState<SurgeonUser>(STAVYA_SURGEONS[0]);
+  const [currentSurgeon, setCurrentSurgeon] = useState<SurgeonUser>(() => {
+    try {
+      const saved = localStorage.getItem('spineos_active_surgeon');
+      if (saved) {
+        const parsed = JSON.parse(saved);
+        const match = STAVYA_SURGEONS.find(s => s.id === parsed.id || s.username === parsed.username);
+        if (match) return match;
+      }
+    } catch (e) {
+      console.warn('Failed to restore active surgeon from localStorage', e);
+    }
+    return STAVYA_SURGEONS[0];
+  });
+
+  const handleSelectSurgeon = (surgeon: SurgeonUser) => {
+    setCurrentSurgeon(surgeon);
+    try {
+      localStorage.setItem('spineos_active_surgeon', JSON.stringify(surgeon));
+    } catch (e) {
+      console.warn('Failed to persist active surgeon to localStorage', e);
+    }
+  };
   const [hierarchyModalOpen, setHierarchyModalOpen] = useState(false);
   const [patients, setPatients] = useState<Patient[]>(DEMO_PATIENTS);
   const [selectedPatientId, setSelectedPatientId] = useState<string>(DEMO_PATIENTS[0].id);
@@ -1112,7 +1133,7 @@ export function App() {
         onClose={() => setHierarchyModalOpen(false)}
         surgeons={surgeons}
         currentSurgeon={currentSurgeon}
-        onSelectSurgeon={setCurrentSurgeon}
+        onSelectSurgeon={handleSelectSurgeon}
       />
 
       {/* Network / WiFi QR Code Modal */}

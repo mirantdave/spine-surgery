@@ -2686,6 +2686,60 @@
   ],
   "auditLog": [
     {
+      "department": "Spine Surgery",
+      "action": "SURGEON_SESSION_STARTED",
+      "actor": "Dr. Yogenkumar Amrutlal Adodariya",
+      "details": "Surgeon authenticated: Dr. Yogenkumar Amrutlal Adodariya (Junior Registrar)",
+      "category": "SECURITY",
+      "id": "aud-1789109773680-uhsj3",
+      "timestamp": "2026-09-11T06:56:13.680Z"
+    },
+    {
+      "department": "Spine Surgery",
+      "action": "SURGEON_SESSION_STARTED",
+      "actor": "Dr. Arijit Vashishtha",
+      "details": "Surgeon authenticated: Dr. Arijit Vashishtha (Senior Registrar)",
+      "category": "SECURITY",
+      "id": "aud-1789109771014-x4g3a",
+      "timestamp": "2026-09-11T06:56:11.014Z"
+    },
+    {
+      "department": "Spine Surgery",
+      "action": "SURGEON_SESSION_STARTED",
+      "actor": "Dr. Kishan Naresh Panjwani",
+      "details": "Surgeon authenticated: Dr. Kishan Naresh Panjwani (Junior Registrar)",
+      "category": "SECURITY",
+      "id": "aud-1789109522748-8j0se",
+      "timestamp": "2026-09-11T06:52:02.748Z"
+    },
+    {
+      "department": "Spine Surgery",
+      "action": "SURGEON_SESSION_STARTED",
+      "actor": "Dr. Arijit Vashishtha",
+      "details": "Surgeon authenticated: Dr. Arijit Vashishtha (Senior Registrar)",
+      "category": "SECURITY",
+      "id": "aud-1789109519483-k3yr2",
+      "timestamp": "2026-09-11T06:51:59.483Z"
+    },
+    {
+      "department": "Spine Surgery",
+      "action": "SURGEON_SESSION_STARTED",
+      "actor": "Dr. Amritesh Singh",
+      "details": "Surgeon authenticated: Dr. Amritesh Singh (Junior Consultant)",
+      "category": "SECURITY",
+      "id": "aud-1789109515268-krtwy",
+      "timestamp": "2026-09-11T06:51:55.268Z"
+    },
+    {
+      "department": "Spine Surgery",
+      "action": "SURGEON_SESSION_STARTED",
+      "actor": "Dr. Bharat Rajendraprasad Dave",
+      "details": "Surgeon authenticated: Dr. Bharat Rajendraprasad Dave (Consultant Spine Surgeon)",
+      "category": "SECURITY",
+      "id": "aud-1789109512210-0s51g",
+      "timestamp": "2026-09-11T06:51:52.210Z"
+    },
+    {
       "patientId": "patient-1",
       "patientName": "Rajesh Sharma",
       "department": "Spine AI Sentinel",
