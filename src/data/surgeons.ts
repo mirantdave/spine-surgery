@@ -7,7 +7,7 @@ export const STAVYA_SURGEONS: SurgeonUser[] = [
   {
     id: 'surg-1',
     name: 'Dr. Bharat Rajendraprasad Dave',
-    formalName: 'Dr. Bharat Rajendraprasad Dave, MS (Ortho), MCh (Spine)',
+    formalName: 'Dr. Bharat Rajendraprasad Dave',
     designation: 'Chief of Spine Surgery | Consultant Spine Surgeon',
     governanceRole: 'Founder & Chairman',
     tier: 'CONSULTANT_SPINE_SURGEON',
@@ -29,7 +29,7 @@ export const STAVYA_SURGEONS: SurgeonUser[] = [
   {
     id: 'surg-2',
     name: 'Dr. Mirant Bharat Dave',
-    formalName: 'Dr. Mirant Bharat Dave, MS (Ortho), FNB (Spine)',
+    formalName: 'Dr. Mirant Bharat Dave',
     designation: 'Managing Director | Consultant Spine Surgeon',
     governanceRole: 'Managing Director',
     tier: 'CONSULTANT_SPINE_SURGEON',
@@ -51,7 +51,7 @@ export const STAVYA_SURGEONS: SurgeonUser[] = [
   {
     id: 'surg-3',
     name: 'Dr. Ajay Krishnan',
-    formalName: 'Dr. Ajay Krishnan, MS (Ortho), Consultant Spine Surgeon',
+    formalName: 'Dr. Ajay Krishnan',
     designation: 'Consultant Spine Surgeon',
     tier: 'CONSULTANT_SPINE_SURGEON',
     tierLabel: 'Consultant Spine Surgeon',
@@ -72,7 +72,7 @@ export const STAVYA_SURGEONS: SurgeonUser[] = [
   {
     id: 'surg-4',
     name: 'Dr. Ravi Ranjan Rai',
-    formalName: 'Dr. Ravi Ranjan Rai, MS (Ortho), Consultant Spine Surgeon',
+    formalName: 'Dr. Ravi Ranjan Rai',
     designation: 'Consultant Spine Surgeon',
     tier: 'CONSULTANT_SPINE_SURGEON',
     tierLabel: 'Consultant Spine Surgeon',
@@ -93,7 +93,7 @@ export const STAVYA_SURGEONS: SurgeonUser[] = [
   {
     id: 'surg-5',
     name: 'Dr. Shivanand Mayi',
-    formalName: 'Dr. Shivanand Mayi, MS (Ortho), Consultant Spine Surgeon',
+    formalName: 'Dr. Shivanand Mayi',
     designation: 'Consultant Spine Surgeon',
     tier: 'CONSULTANT_SPINE_SURGEON',
     tierLabel: 'Consultant Spine Surgeon',
@@ -118,7 +118,7 @@ export const STAVYA_SURGEONS: SurgeonUser[] = [
   {
     id: 'surg-6',
     name: 'Dr. Amritesh Singh',
-    formalName: 'Dr. Amritesh Singh, MS (Ortho), Spine Fellow',
+    formalName: 'Dr. Amritesh Singh',
     designation: 'Junior Spine Consultant',
     tier: 'JUNIOR_CONSULTANT',
     tierLabel: 'Junior Consultant',
@@ -143,7 +143,7 @@ export const STAVYA_SURGEONS: SurgeonUser[] = [
   {
     id: 'surg-7',
     name: 'Dr. Arijit Vashishtha',
-    formalName: 'Dr. Arijit Vashishtha, DNB (Ortho)',
+    formalName: 'Dr. Arijit Vashishtha',
     designation: 'Senior Registrar (Spine Surgery)',
     tier: 'SENIOR_REGISTRAR',
     tierLabel: 'Senior Registrar',
@@ -164,7 +164,7 @@ export const STAVYA_SURGEONS: SurgeonUser[] = [
   {
     id: 'surg-8',
     name: 'Dr. Saurabh Shrikant Kulkarni',
-    formalName: 'Dr. Saurabh Shrikant Kulkarni, MS (Ortho)',
+    formalName: 'Dr. Saurabh Shrikant Kulkarni',
     designation: 'Senior Registrar (Spine Surgery)',
     tier: 'SENIOR_REGISTRAR',
     tierLabel: 'Senior Registrar',
@@ -189,7 +189,7 @@ export const STAVYA_SURGEONS: SurgeonUser[] = [
   {
     id: 'surg-9',
     name: 'Dr. Kishan Naresh Panjwani',
-    formalName: 'Dr. Kishan Naresh Panjwani, MBBS, Ortho Resident',
+    formalName: 'Dr. Kishan Naresh Panjwani',
     designation: 'Junior Registrar (Spine Surgery)',
     tier: 'JUNIOR_REGISTRAR',
     tierLabel: 'Junior Registrar',
@@ -210,7 +210,7 @@ export const STAVYA_SURGEONS: SurgeonUser[] = [
   {
     id: 'surg-10',
     name: 'Dr. Yogenkumar Amrutlal Adodariya',
-    formalName: 'Dr. Yogenkumar Amrutlal Adodariya, MBBS, Ortho Resident',
+    formalName: 'Dr. Yogenkumar Amrutlal Adodariya',
     designation: 'Junior Registrar (Spine Surgery)',
     tier: 'JUNIOR_REGISTRAR',
     tierLabel: 'Junior Registrar',

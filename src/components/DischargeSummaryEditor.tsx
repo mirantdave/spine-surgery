@@ -41,7 +41,7 @@ export const DischargeSummaryEditor: React.FC<DischargeSummaryEditorProps> = ({
     return {
       id: `ds-${Date.now()}`,
       dischargeDate: new Date().toISOString().split('T')[0],
-      summaryAuthor: patient.attendingSurgeon || 'Dr. Bharat Rajendraprasad Dave, MS (Ortho), MCh (Spine)',
+      summaryAuthor: patient.attendingSurgeon || 'Dr. Bharat Rajendraprasad Dave',
       admissionDate: patient.admissionDate,
       surgeryDate: patient.plannedOrSurgeryDate,
       hospitalCourseSummary: `${patient.age}-year-old ${patient.gender.toLowerCase()} admitted with ${patient.primaryDiagnosis}. Underwent uneventful ${patient.plannedProcedure} on ${patient.plannedOrSurgeryDate}. Post-operatively, patient had significant symptomatic relief. Mobilized early with physiotherapist assistance. Drain output remained low and drain was safely removed. Patient is clinically stable and neurological exam is preserved.`,
@@ -74,7 +74,7 @@ export const DischargeSummaryEditor: React.FC<DischargeSummaryEditorProps> = ({
       firstFollowUpDate: new Date(Date.now() + 12 * 24 * 60 * 60 * 1000).toISOString().split('T')[0] + ' at 10:00 AM (Stavya Spine OPD)',
       emergencyContact: '+91 98201 00000 (Stavya 24/7 Spine Helpline)',
       dischargeStatus: 'Ready for Home',
-      surgeonSignature: patient.attendingSurgeon || 'Dr. Bharat Rajendraprasad Dave, MS (Ortho), MCh (Spine)',
+      surgeonSignature: patient.attendingSurgeon || 'Dr. Bharat Rajendraprasad Dave',
       entryAttribution: {
         enteredByName: currentSurgeon.name,
         enteredByDesignation: currentSurgeon.designation,

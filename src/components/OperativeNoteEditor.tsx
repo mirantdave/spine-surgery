@@ -51,8 +51,8 @@ export const OperativeNoteEditor: React.FC<OperativeNoteEditorProps> = ({
       surgeryDate: patient.plannedOrSurgeryDate || new Date().toISOString().split('T')[0],
       startTime: '08:30 AM',
       endTime: '11:00 AM',
-      primarySurgeon: patient.attendingSurgeon || 'Dr. Bharat Rajendraprasad Dave, MS (Ortho), MCh (Spine)',
-      assistantSurgeon: patient.fellowOrResident || 'Dr. Amritesh Singh, MS (Ortho)',
+      primarySurgeon: patient.attendingSurgeon || 'Dr. Bharat Rajendraprasad Dave',
+      assistantSurgeon: patient.fellowOrResident || 'Dr. Amritesh Singh',
       anesthesiologist: 'Dr. Sunita Kulkarni, MD (Anesth)',
       scrubNurse: 'Sister Deepa (Staff Nurse / OT Senior)',
       preOpDiagnosis: patient.primaryDiagnosis,
@@ -109,7 +109,7 @@ export const OperativeNoteEditor: React.FC<OperativeNoteEditorProps> = ({
       },
       complications: 'None. Procedure tolerated well.',
       immediatePostOpPlan: '1. Extubate in OR. 2. PACU neuro exam. 3. Monitor drain output. 4. Mobilize POD 1 with rigid brace.',
-      surgeonSignature: patient.attendingSurgeon || 'Dr. Bharat Rajendraprasad Dave, MS (Ortho), MCh (Spine)',
+      surgeonSignature: patient.attendingSurgeon || 'Dr. Bharat Rajendraprasad Dave',
       isLocked: false,
     };
   });

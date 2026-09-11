@@ -11,12 +11,12 @@ interface NewPatientModalProps {
 }
 
 const STAVYA_CONSULTANTS = [
-  'Dr. Bharat Rajendraprasad Dave, MS (Ortho), MCh (Spine)',
-  'Dr. Mirant Bharat Dave, MS (Ortho), FNB (Spine)',
-  'Dr. Ajay Krishnan, MS (Ortho), Consultant Spine Surgeon',
-  'Dr. Ravi Ranjan Rai, MS (Ortho), Consultant Spine Surgeon',
-  'Dr. Shivanand Mayi, MS (Ortho), Consultant Spine Surgeon',
-  'Dr. Amritesh Singh, MS (Ortho), Junior Consultant'
+  'Dr. Bharat Rajendraprasad Dave',
+  'Dr. Mirant Bharat Dave',
+  'Dr. Ajay Krishnan',
+  'Dr. Ravi Ranjan Rai',
+  'Dr. Shivanand Mayi',
+  'Dr. Amritesh Singh'
 ];
 
 export const NewPatientModal: React.FC<NewPatientModalProps> = ({
@@ -87,7 +87,7 @@ export const NewPatientModal: React.FC<NewPatientModalProps> = ({
       approach,
       avatarColor: spineRegion === 'cervical' ? '#059669' : spineRegion === 'thoracic' ? '#a855f7' : '#2563eb',
       entryAttribution: {
-        enteredByName: currentSurgeon?.formalName || 'Dr. Saurabh Shrikant Kulkarni, MS (Ortho)',
+        enteredByName: currentSurgeon?.formalName || 'Dr. Saurabh Shrikant Kulkarni',
         enteredByDesignation: currentSurgeon?.designation || 'Senior Registrar (Spine Surgery)',
         enteredAt: timeStamp,
         staffTier: currentSurgeon?.tier || 'SENIOR_REGISTRAR',
@@ -271,7 +271,7 @@ export const NewPatientModal: React.FC<NewPatientModalProps> = ({
             <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
               <UserCheck size={14} color="#0071e3" />
               <span>
-                Data Entry Recorder: <strong style={{ color: '#1d1d1f' }}>{currentSurgeon?.formalName || 'Dr. Saurabh Shrikant Kulkarni, MS (Ortho)'}</strong> ({currentSurgeon?.designation || 'Senior Registrar'})
+                Data Entry Recorder: <strong style={{ color: '#1d1d1f' }}>{currentSurgeon?.formalName || 'Dr. Saurabh Shrikant Kulkarni'}</strong> ({currentSurgeon?.designation || 'Senior Registrar'})
               </span>
             </div>
             <div style={{ display: 'flex', alignItems: 'center', gap: '5px' }}>
